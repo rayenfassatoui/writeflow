@@ -5,6 +5,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { DashboardLayout } from '@/app/components/dashboard/DashboardLayout'
 import { ContentEditor } from '@/app/components/editor/ContentEditor'
 import { VersionHistory } from '@/app/components/editor/VersionHistory'
+import { ContentOptimizer } from '@/app/components/editor/ContentOptimizer'
 import { motion } from 'framer-motion'
 import { Save, ArrowLeft } from 'lucide-react'
 
@@ -86,6 +87,11 @@ export default function EditProject() {
     handleSave(restoredContent)
   }
 
+  const handleOptimize = (optimizedContent: string) => {
+    setContent(optimizedContent)
+    handleSave(optimizedContent)
+  }
+
   return (
     <DashboardLayout>
       <div className="max-w-7xl mx-auto space-y-8">
@@ -110,6 +116,7 @@ export default function EditProject() {
             />
           </div>
           <div className="flex items-center gap-x-4">
+            <ContentOptimizer content={content} onOptimize={handleOptimize} />
             <VersionHistory projectId={params.id as string} onRestore={handleRestore} />
             <span className="text-sm text-gray-500 dark:text-gray-400">
               {project?.status.toLowerCase()}

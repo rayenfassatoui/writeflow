@@ -2,18 +2,21 @@ import { NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
+import Groq from 'groq-sdk'
+
+type ContentLength = 'short' | 'medium' | 'long'
 
 export async function POST(req: Request) {
   try {
     // Check authentication
     const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
+    if (!session?.user || !('id' in session.user)) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
 
     // Get user from database
     const user = await prisma.user.findUnique({
-      where: { id: session.user.id },
+      where: { id: session.user.id as string },
     })
 
     if (!user) {
@@ -41,34 +44,23 @@ export async function POST(req: Request) {
       prompt += `Additional requirements: ${additionalInstructions}`
     }
 
-    // Configure max tokens based on length
-    const maxTokens = {
-      short: 250,
-      medium: 500,
-      long: 1000,
-    }[length]
+    // Initialize Groq client
+    const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
-    // Generate content using OpenAI API
-    const response = await fetch('https://api.openai.com/v1/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: 'text-davinci-003',
-        prompt,
-        max_tokens: maxTokens,
-        temperature: 0.7,
-      }),
+    // Generate content using Groq API
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
+      max_tokens: length === 'short' ? 250 : length === 'medium' ? 500 : 1000,
     })
 
-    if (!response.ok) {
-      throw new Error('OpenAI API request failed')
-    }
-
-    const data = await response.json()
-    const generatedContent = data.choices[0]?.text || ''
+    const generatedContent = completion.choices[0]?.message?.content || ''
 
     // Update user credits
     await prisma.user.update({

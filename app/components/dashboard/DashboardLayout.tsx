@@ -11,8 +11,7 @@ import {
     Menu,
     X,
     Plus,
-    LogOut,
-    Sparkles,
+    LogOut, BarChart3
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { signOut } from 'next-auth/react'
@@ -20,7 +19,7 @@ import { signOut } from 'next-auth/react'
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Projects', href: '/dashboard/projects', icon: FileText },
-  { name: 'Generate', href: '/dashboard/generate', icon: Sparkles },
+  { name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 },
   { name: 'History', href: '/dashboard/history', icon: History },
   { name: 'Settings', href: '/dashboard/settings', icon: Settings },
 ]
