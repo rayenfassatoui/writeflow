@@ -11,10 +11,13 @@ export async function GET() {
       return new NextResponse('Unauthorized', { status: 401 })
     }
 
-    // Get user's projects
+    // Get user's projects with tags
     const projects = await prisma.project.findMany({
       where: {
         userId: session.user.id as string,
+      },
+      include: {
+        tags: true,
       },
       orderBy: {
         updatedAt: 'desc',
@@ -47,6 +50,9 @@ export async function POST(req: Request) {
         type,
         status: 'DRAFT',
         userId: session.user.id as string,
+      },
+      include: {
+        tags: true,
       },
     })
 
