@@ -1,11 +1,5 @@
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import { NextAuthOptions } from "next-auth"
 import NextAuth from "next-auth/next"
-import GoogleProvider from "next-auth/providers/google"
-import GitHubProvider from "next-auth/providers/github"
-import CredentialsProvider from "next-auth/providers/credentials"
-import bcrypt from "bcryptjs"
-import { prisma } from "@/lib/prisma"
+import { authOptions } from "./auth"
 
 // Using a separate variable and then exporting it to avoid Next.js 15 type issues
 export const authOptions: NextAuthOptions = {
