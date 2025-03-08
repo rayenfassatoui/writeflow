@@ -86,7 +86,7 @@ export function Hero() {
           >
             <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 dark:bg-gray-800/50 dark:ring-gray-700 lg:-m-4 lg:rounded-2xl lg:p-4">
               <img
-                src="/dashboard-preview.svg"
+                src="/dashboard-preview.png"
                 alt="App screenshot"
                 width={2432}
                 height={1442}

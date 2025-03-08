@@ -128,10 +128,10 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             <Menu className="h-6 w-6" />
           </button>
 
-          <div className="flex flex-1 justify-end gap-x-4 self-stretch lg:gap-x-6">
-            <Link
+          <div className="flex flex-1 justify-end gap-x-4 lg:gap-x-6">
+          <Link
               href="/dashboard/projects/new"
-              className="flex items-center gap-x-2 rounded-full bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500"
+              className="flex items-center gap-x-2 rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500"
             >
               <Plus className="h-4 w-4" />
               New Project
@@ -143,4 +143,4 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       </div>
     </div>
   )
-} 
+}
