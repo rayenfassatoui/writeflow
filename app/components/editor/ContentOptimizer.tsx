@@ -124,7 +124,7 @@ export function ContentOptimizer({ content, onOptimize }: ContentOptimizerProps)
                   </label>
                   <select
                     value={contentType}
-                    onChange={(e) => setContentType(e.target.value as any)}
+                    onChange={(e) => setContentType(e.target.value as 'blog' | 'social' | 'ad')}
                     className="w-full rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
                   >
                     <option value="blog">Blog Post</option>
@@ -139,7 +139,7 @@ export function ContentOptimizer({ content, onOptimize }: ContentOptimizerProps)
                   </label>
                   <select
                     value={tone}
-                    onChange={(e) => setTone(e.target.value as any)}
+                    onChange={(e) => setTone(e.target.value as 'professional' | 'casual' | 'friendly')}
                     className="w-full rounded border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm"
                   >
                     <option value="professional">Professional</option>
@@ -234,4 +234,4 @@ export function ContentOptimizer({ content, onOptimize }: ContentOptimizerProps)
       </AnimatePresence>
     </div>
   )
-} 
+}

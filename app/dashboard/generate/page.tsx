@@ -6,12 +6,14 @@ import { motion } from 'framer-motion'
 import { Sparkles, Send, RefreshCcw } from 'lucide-react'
 
 type ContentType = 'BLOG_POST' | 'SOCIAL_MEDIA' | 'AD_COPY' | 'EMAIL' | 'WEBSITE_COPY' | 'CUSTOM'
+type ToneType = 'professional' | 'casual' | 'friendly' | 'formal'
+type LengthType = 'short' | 'medium' | 'long'
 
 interface GenerationParams {
   contentType: ContentType
   topic: string
-  tone: 'professional' | 'casual' | 'friendly' | 'formal'
-  length: 'short' | 'medium' | 'long'
+  tone: ToneType
+  length: LengthType
   keywords: string[]
   additionalInstructions?: string
 }
@@ -113,7 +115,7 @@ export default function Generate() {
               </label>
               <select
                 value={params.tone}
-                onChange={(e) => setParams(prev => ({ ...prev, tone: e.target.value as any }))}
+                onChange={(e) => setParams(prev => ({ ...prev, tone: e.target.value as ToneType }))}
                 className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-600"
               >
                 <option value="professional">Professional</option>
@@ -130,7 +132,7 @@ export default function Generate() {
               </label>
               <select
                 value={params.length}
-                onChange={(e) => setParams(prev => ({ ...prev, length: e.target.value as any }))}
+                onChange={(e) => setParams(prev => ({ ...prev, length: e.target.value as LengthType }))}
                 className="w-full rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 px-4 py-2 text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-600"
               >
                 <option value="short">Short</option>
@@ -219,4 +221,4 @@ export default function Generate() {
       </div>
     </DashboardLayout>
   )
-} 
+}

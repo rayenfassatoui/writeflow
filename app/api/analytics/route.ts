@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getServerAuthSession } from '@/app/api/auth/[...nextauth]/route'
 import { AnalyticsService } from '@/app/lib/services/analytics'
 
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuthSession()
     if (!session?.user || !('id' in session.user)) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
@@ -20,7 +19,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuthSession()
     if (!session?.user || !('id' in session.user)) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
@@ -37,4 +36,4 @@ export async function POST(request: Request) {
     console.error('Error tracking activity:', error)
     return new NextResponse('Internal Server Error', { status: 500 })
   }
-} 
+}

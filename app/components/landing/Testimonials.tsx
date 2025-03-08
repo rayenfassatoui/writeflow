@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Image from 'next/image'
 import { Star } from 'lucide-react'
 
 const testimonials = [
@@ -88,10 +89,12 @@ export function Testimonials() {
                   <p className="mt-4 text-sm font-semibold leading-6">{testimonial.body}</p>
                 </blockquote>
                 <figcaption className="mt-6 flex items-center gap-x-4">
-                  <img
+                  <Image
                     className="h-10 w-10 rounded-full bg-gray-50"
                     src={testimonial.author.imageUrl}
-                    alt=""
+                    alt={testimonial.author.name}
+                    width={40}
+                    height={40}
                   />
                   <div>
                     <div className="font-semibold text-gray-900 dark:text-white">{testimonial.author.name}</div>
@@ -105,4 +108,4 @@ export function Testimonials() {
       </div>
     </div>
   )
-} 
+}

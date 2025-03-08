@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getServerAuthSession } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   try {
     // Check authentication
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuthSession()
     if (!session?.user || !('id' in session.user)) {
       return new NextResponse('Unauthorized', { status: 401 })
     }
@@ -97,4 +96,4 @@ export async function GET() {
     console.error('Error fetching dashboard data:', error)
     return new NextResponse('Internal Server Error', { status: 500 })
   }
-} 
+}

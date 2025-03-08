@@ -22,20 +22,21 @@ export function VersionHistory({ projectId, onRestore }: VersionHistoryProps) {
 
   useEffect(() => {
     if (isOpen) {
+      // Move fetchVersions inside useEffect to avoid dependency issues
+      const fetchVersions = async () => {
+        try {
+          const response = await fetch(`/api/projects/${projectId}/versions`)
+          if (!response.ok) throw new Error('Failed to fetch versions')
+          const data = await response.json()
+          setVersions(data)
+        } catch (error) {
+          console.error('Error fetching versions:', error)
+        }
+      }
+      
       fetchVersions()
     }
   }, [isOpen, projectId])
-
-  const fetchVersions = async () => {
-    try {
-      const response = await fetch(`/api/projects/${projectId}/versions`)
-      if (!response.ok) throw new Error('Failed to fetch versions')
-      const data = await response.json()
-      setVersions(data)
-    } catch (error) {
-      console.error('Error fetching versions:', error)
-    }
-  }
 
   const handleRestore = (version: Version) => {
     onRestore(version.content)
@@ -101,4 +102,4 @@ export function VersionHistory({ projectId, onRestore }: VersionHistoryProps) {
       </AnimatePresence>
     </div>
   )
-} 
+}

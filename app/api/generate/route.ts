@@ -4,7 +4,7 @@ import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { prisma } from '@/lib/prisma'
 import Groq from 'groq-sdk'
 
-type ContentLength = 'short' | 'medium' | 'long'
+// Removing the unused type
 
 export async function POST(req: Request) {
   try {
@@ -73,4 +73,4 @@ export async function POST(req: Request) {
     console.error('Error generating content:', error)
     return new NextResponse('Internal Server Error', { status: 500 })
   }
-} 
+}

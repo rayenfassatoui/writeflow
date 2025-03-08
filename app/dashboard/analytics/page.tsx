@@ -26,7 +26,7 @@ interface AnalyticsData {
     id: string
     type: ActivityType
     createdAt: string
-    metadata: any
+    metadata: Record<string, unknown>
   }>
   projectMetrics: Array<{
     id: string
@@ -229,4 +229,4 @@ export default function AnalyticsDashboard() {
       </div>
     </DashboardLayout>
   )
-} 
+}

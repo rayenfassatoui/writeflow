@@ -35,7 +35,7 @@ export function WordPressPublisher({ title, content, onSuccess, onError }: WordP
         throw new Error(error.error || 'Failed to publish to WordPress')
       }
 
-      const result = await response.json()
+      await response.json()
       onSuccess?.()
     } catch (error) {
       console.error('Error publishing to WordPress:', error)
@@ -78,4 +78,4 @@ export function WordPressPublisher({ title, content, onSuccess, onError }: WordP
       </motion.button>
     </div>
   )
-} 
+}

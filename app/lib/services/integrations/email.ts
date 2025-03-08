@@ -1,5 +1,4 @@
 import nodemailer from 'nodemailer'
-import { render } from '@react-email/render'
 import { Project } from '@prisma/client'
 
 export interface EmailConfig {
@@ -26,14 +25,12 @@ export class EmailService {
       shared: `Project Shared with You: ${project.title}`,
     }[type]
 
-    const html = render(
-      <EmailTemplate
-        type={type}
-        projectTitle={project.title}
-        projectDescription={project.description || ''}
-        projectUrl={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/projects/${project.id}`}
-      />
-    )
+    const html = this.renderEmailTemplate({
+      type,
+      projectTitle: project.title,
+      projectDescription: project.description || '',
+      projectUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/projects/${project.id}`
+    })
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM,
@@ -44,14 +41,12 @@ export class EmailService {
   }
 
   async sendExportNotification(to: string, project: Project, format: string, downloadUrl: string) {
-    const html = render(
-      <EmailTemplate
-        type="export"
-        projectTitle={project.title}
-        format={format}
-        downloadUrl={downloadUrl}
-      />
-    )
+    const html = this.renderEmailTemplate({
+      type: 'export',
+      projectTitle: project.title,
+      format,
+      downloadUrl
+    })
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM,
@@ -62,14 +57,12 @@ export class EmailService {
   }
 
   async sendCollaborationInvite(to: string, project: Project, invitedBy: string) {
-    const html = render(
-      <EmailTemplate
-        type="invite"
-        projectTitle={project.title}
-        invitedBy={invitedBy}
-        acceptUrl={`${process.env.NEXT_PUBLIC_APP_URL}/dashboard/projects/${project.id}/accept-invite`}
-      />
-    )
+    const html = this.renderEmailTemplate({
+      type: 'invite',
+      projectTitle: project.title,
+      invitedBy,
+      acceptUrl: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/projects/${project.id}/accept-invite`
+    })
 
     await this.transporter.sendMail({
       from: process.env.EMAIL_FROM,
@@ -77,6 +70,108 @@ export class EmailService {
       subject: `Invitation to Collaborate: ${project.title}`,
       html,
     })
+  }
+  private renderEmailTemplate(props: EmailTemplateProps): string {
+    const {
+      type,
+      projectTitle,
+      projectDescription,
+      projectUrl,
+      format,
+      downloadUrl,
+      invitedBy,
+      acceptUrl,
+    } = props;
+
+    let title = '';
+    if (type === 'created') title = 'New Project Created';
+    if (type === 'updated') title = 'Project Updated';
+    if (type === 'shared') title = 'Project Shared with You';
+    if (type === 'export') title = 'Export Ready';
+    if (type === 'invite') title = 'Invitation to Collaborate';
+
+    let content = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h1 style="color: #4F46E5;">${title}</h1>
+
+        <div style="margin-top: 20px;">
+          <h2>${projectTitle}</h2>
+          ${projectDescription ? `<p>${projectDescription}</p>` : ''}
+        </div>
+    `;
+
+    if (type === 'export' && format && downloadUrl) {
+      content += `
+        <div style="margin-top: 20px;">
+          <p>Your ${format} export is ready. Click the button below to download:</p>
+          <a
+            href="${downloadUrl}"
+            style="
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #4F46E5;
+              color: white;
+              text-decoration: none;
+              border-radius: 5px;
+            "
+          >
+            Download ${format.toUpperCase()}
+          </a>
+        </div>
+      `;
+    }
+
+    if (type === 'invite' && invitedBy && acceptUrl) {
+      content += `
+        <div style="margin-top: 20px;">
+          <p>${invitedBy} has invited you to collaborate on this project.</p>
+          <a
+            href="${acceptUrl}"
+            style="
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #4F46E5;
+              color: white;
+              text-decoration: none;
+              border-radius: 5px;
+            "
+          >
+            Accept Invitation
+          </a>
+        </div>
+      `;
+    }
+
+    if (projectUrl) {
+      content += `
+        <div style="margin-top: 20px;">
+          <a
+            href="${projectUrl}"
+            style="
+              display: inline-block;
+              padding: 10px 20px;
+              background-color: #4F46E5;
+              color: white;
+              text-decoration: none;
+              border-radius: 5px;
+            "
+          >
+            View Project
+          </a>
+        </div>
+      `;
+    }
+
+    content += `
+      <div style="margin-top: 40px; border-top: 1px solid #eee; padding-top: 20px;">
+        <p style="color: #666; font-size: 14px;">
+          This email was sent from WriteFlow. If you did not expect this email, please ignore it.
+        </p>
+      </div>
+    </div>
+    `;
+
+    return content;
   }
 }
 
@@ -90,93 +185,3 @@ interface EmailTemplateProps {
   invitedBy?: string
   acceptUrl?: string
 }
-
-function EmailTemplate({
-  type,
-  projectTitle,
-  projectDescription,
-  projectUrl,
-  format,
-  downloadUrl,
-  invitedBy,
-  acceptUrl,
-}: EmailTemplateProps) {
-  return (
-    <div style={{ fontFamily: 'Arial, sans-serif', maxWidth: '600px', margin: '0 auto' }}>
-      <h1 style={{ color: '#4F46E5' }}>
-        {type === 'created' && 'New Project Created'}
-        {type === 'updated' && 'Project Updated'}
-        {type === 'shared' && 'Project Shared with You'}
-        {type === 'export' && 'Export Ready'}
-        {type === 'invite' && 'Invitation to Collaborate'}
-      </h1>
-
-      <div style={{ marginTop: '20px' }}>
-        <h2>{projectTitle}</h2>
-        {projectDescription && <p>{projectDescription}</p>}
-      </div>
-
-      {type === 'export' && (
-        <div style={{ marginTop: '20px' }}>
-          <p>Your {format} export is ready. Click the button below to download:</p>
-          <a
-            href={downloadUrl}
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#4F46E5',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '5px',
-            }}
-          >
-            Download {format?.toUpperCase()}
-          </a>
-        </div>
-      )}
-
-      {type === 'invite' && (
-        <div style={{ marginTop: '20px' }}>
-          <p>{invitedBy} has invited you to collaborate on this project.</p>
-          <a
-            href={acceptUrl}
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#4F46E5',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '5px',
-            }}
-          >
-            Accept Invitation
-          </a>
-        </div>
-      )}
-
-      {projectUrl && (
-        <div style={{ marginTop: '20px' }}>
-          <a
-            href={projectUrl}
-            style={{
-              display: 'inline-block',
-              padding: '10px 20px',
-              backgroundColor: '#4F46E5',
-              color: 'white',
-              textDecoration: 'none',
-              borderRadius: '5px',
-            }}
-          >
-            View Project
-          </a>
-        </div>
-      )}
-
-      <div style={{ marginTop: '40px', borderTop: '1px solid #eee', paddingTop: '20px' }}>
-        <p style={{ color: '#666', fontSize: '14px' }}>
-          This email was sent from WriteFlow. If you did not expect this email, please ignore it.
-        </p>
-      </div>
-    </div>
-  )
-} 

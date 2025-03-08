@@ -57,7 +57,7 @@ export function ContentEditor({
     ],
     content: initialContent,
     editable: !readOnly,
-    onUpdate: ({ editor }) => {
+    onUpdate: () => {
       // Auto-save functionality
       if (onSave) {
         const timeoutId = setTimeout(() => {
@@ -237,4 +237,4 @@ export function ContentEditor({
       />
     </div>
   )
-} 
+}

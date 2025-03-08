@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAuth } from '@/hooks/useAuth'
@@ -16,7 +15,7 @@ const navigation = [
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const pathname = usePathname()
+  // Remove unused pathname variable
   const { isAuthenticated, isLoading } = useAuth()
 
   return (
@@ -160,4 +159,4 @@ export function Navbar() {
       </AnimatePresence>
     </header>
   )
-} 
+}

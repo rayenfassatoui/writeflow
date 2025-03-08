@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { DashboardLayout } from '@/app/components/dashboard/DashboardLayout'
 import { ContentEditor } from '@/app/components/editor/ContentEditor'
@@ -24,15 +24,10 @@ export default function EditProject() {
   const params = useParams()
   const router = useRouter()
   const [project, setProject] = useState<Project | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isSaving, setIsSaving] = useState(false)
 
-  useEffect(() => {
-    if (params.id) {
-      fetchProject()
-    }
-  }, [params.id])
-
-  const fetchProject = async () => {
+  const fetchProject = useCallback(async () => {
     try {
       const response = await fetch(`/api/projects/${params.id}`)
       if (!response.ok) throw new Error('Failed to fetch project')
@@ -41,7 +36,13 @@ export default function EditProject() {
     } catch (error) {
       console.error('Error fetching project:', error)
     }
-  }
+  }, [params.id])
+
+  useEffect(() => {
+    if (params.id) {
+      fetchProject()
+    }
+  }, [params.id, fetchProject])
 
   const handleSave = async (newContent: string) => {
     if (!project) return
@@ -49,35 +50,25 @@ export default function EditProject() {
     setIsSaving(true)
     try {
       const response = await fetch(`/api/projects/${project.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          title: project.title,
           content: newContent,
         }),
       })
 
       if (!response.ok) throw new Error('Failed to save project')
       
-      // Create a new version
-      await fetch(`/api/projects/${project.id}/versions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: newContent }),
-      })
-
-      setProject(prev => prev ? { ...prev, content: newContent } : null)
+      toast.success('Project saved successfully')
     } catch (error) {
       console.error('Error saving project:', error)
+      toast.error('Failed to save project')
     } finally {
       setIsSaving(false)
     }
   }
-
   const handleRestore = (restoredContent: string) => {
     if (project) {
       setProject({ ...project, content: restoredContent })
@@ -153,4 +144,4 @@ export default function EditProject() {
       </div>
     </DashboardLayout>
   )
-} 
+}

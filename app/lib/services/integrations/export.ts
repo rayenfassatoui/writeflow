@@ -9,7 +9,7 @@ export interface ExportOptions {
   title?: string
   author?: string
   date?: Date
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 export class ExportService {
@@ -106,7 +106,7 @@ export class ExportService {
     return '<!DOCTYPE html>' + html.outerHTML
   }
 
-  async exportToCSV(data: any[], options: ExportOptions = {}) {
+  async exportToCSV(data: Record<string, unknown>[], options: ExportOptions = {}) {
     const parser = new Parser({
       fields: Object.keys(data[0]),
     })
@@ -114,7 +114,7 @@ export class ExportService {
     return parser.parse(data)
   }
 
-  async exportToJSON(data: any, options: ExportOptions = {}) {
+  async exportToJSON(data: Record<string, unknown>, options: ExportOptions = {}) {
     return JSON.stringify({
       metadata: {
         title: options.title,
@@ -125,4 +125,4 @@ export class ExportService {
       data,
     }, null, 2)
   }
-} 
+}

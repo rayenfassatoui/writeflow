@@ -1,3 +1,5 @@
+import Groq from 'groq-sdk'
+
 export interface OptimizationOptions {
   content: string
   targetKeywords: string[]
@@ -92,7 +94,6 @@ export class ContentOptimizer {
   async optimize(options: OptimizationOptions): Promise<OptimizationResult> {
     try {
       // Initialize Groq client
-      const Groq = require('groq-sdk')
       const groq = new Groq({ apiKey: process.env.GROQ_API_KEY })
 
       // Call Groq API for content optimization
@@ -143,4 +144,4 @@ export class ContentOptimizer {
       throw error
     }
   }
-} 
+}

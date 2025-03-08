@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Settings, Key, User, Shield, Save } from 'lucide-react'
 import { DashboardLayout } from '@/app/components/dashboard/DashboardLayout'
-import { useAuth } from '@/app/hooks/useAuth'
 
 interface UserSettings {
   name: string
@@ -14,7 +13,7 @@ interface UserSettings {
 }
 
 export default function SettingsPage() {
-  const { user } = useAuth()
+  // Removed unused user variable
   const [settings, setSettings] = useState<UserSettings>({
     name: '',
     email: '',
@@ -195,4 +194,4 @@ export default function SettingsPage() {
       </div>
     </DashboardLayout>
   )
-} 
+}

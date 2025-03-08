@@ -7,7 +7,7 @@ export interface WordPressConfig {
 }
 
 export class WordPressService {
-  private wp: any
+  private wp: WPAPI
 
   constructor(config: WordPressConfig) {
     this.wp = new WPAPI({
@@ -62,4 +62,4 @@ export class WordPressService {
       throw error
     }
   }
-} 
+}

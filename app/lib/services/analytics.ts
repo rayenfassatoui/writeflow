@@ -2,7 +2,7 @@ import { prisma } from '@/lib/prisma'
 import { ActivityType } from '@prisma/client'
 
 export class AnalyticsService {
-  static async trackActivity(userId: string, type: ActivityType, metadata?: any) {
+  static async trackActivity(userId: string, type: ActivityType, metadata?: Record<string, unknown>) {
     return await prisma.userActivity.create({
       data: {
         userId,
@@ -68,4 +68,4 @@ export class AnalyticsService {
       })),
     }
   }
-} 
+}

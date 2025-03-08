@@ -12,14 +12,14 @@ export default function Login() {
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
   const [isLoading, setIsLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError(null)
+    setErrorMessage(null)
 
     try {
       const result = await signIn('credentials', {
@@ -29,12 +29,12 @@ export default function Login() {
       })
 
       if (result?.error) {
-        setError('Invalid email or password')
+        setErrorMessage('Invalid email or password')
       } else {
         router.push(callbackUrl)
       }
-    } catch (error) {
-      setError('An error occurred. Please try again.')
+    } catch (_error) {
+      setErrorMessage('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -65,9 +65,9 @@ export default function Login() {
           </p>
         </div>
 
-        {error && (
+        {errorMessage && (
           <div className="bg-red-50 dark:bg-red-900/50 border border-red-200 dark:border-red-800 rounded-lg p-4">
-            <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+            <p className="text-sm text-red-600 dark:text-red-400">{errorMessage}</p>
           </div>
         )}
 
@@ -143,4 +143,4 @@ export default function Login() {
       </motion.div>
     </div>
   )
-} 
+}
