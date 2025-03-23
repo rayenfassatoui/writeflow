@@ -3,7 +3,6 @@
   "buildCommand": "npm run vercel-build",
   "framework": "nextjs",
   "outputDirectory": ".next",
-  "skipBuild": false,
   "functions": {
     "app/api/**/*": {
       "memory": 1024,
