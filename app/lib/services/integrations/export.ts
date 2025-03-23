@@ -106,7 +106,7 @@ export class ExportService {
     return '<!DOCTYPE html>' + html.outerHTML
   }
 
-  async exportToCSV(data: Record<string, unknown>[], options: ExportOptions = {}) {
+  async exportToCSV(data: Record<string, unknown>[]) {
     const parser = new Parser({
       fields: Object.keys(data[0]),
     })

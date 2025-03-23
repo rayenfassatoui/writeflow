@@ -5,5 +5,13 @@
     "@typescript-eslint/no-unused-vars": "warn",
     "@typescript-eslint/no-require-imports": "off",
     "react-hooks/exhaustive-deps": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["app/api/projects/[id]/**/*.ts"],
+      "rules": {
+        "@typescript-eslint/ban-ts-comment": "off"
+      }
+    }
+  ]
 }

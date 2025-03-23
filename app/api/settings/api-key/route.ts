@@ -1,12 +1,11 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/app/api/auth/[...nextauth]/route'
+import { getServerAuthSession } from '@/app/api/auth/[...nextauth]/auth'
 import { prisma } from '@/lib/prisma'
 import crypto from 'crypto'
 
 export async function POST() {
   try {
-    const session = await getServerSession(authOptions)
+    const session = await getServerAuthSession()
     if (!session?.user?.id) {
       return new NextResponse('Unauthorized', { status: 401 })
     }

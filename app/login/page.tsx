@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Github, Mail } from 'lucide-react'
 
-export default function Login() {
+function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const callbackUrl = searchParams.get('callbackUrl') || '/dashboard'
@@ -33,7 +33,7 @@ export default function Login() {
       } else {
         router.push(callbackUrl)
       }
-    } catch (_error) {
+    } catch {
       setErrorMessage('An error occurred. Please try again.')
     } finally {
       setIsLoading(false)
@@ -142,5 +142,19 @@ export default function Login() {
         </form>
       </motion.div>
     </div>
+  )
+}
+
+export default function Login() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold text-gray-700 dark:text-gray-200">Loading...</h2>
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
