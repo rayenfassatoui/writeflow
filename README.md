@@ -1,6 +1,6 @@
-# WriteFlow - AI-Powered Content Creation Assistant
+# WriteFlow - AI-Powered Content Creation Platform
 
-WriteFlow is a sophisticated SaaS platform that leverages artificial intelligence to streamline and enhance the content creation process for marketers, writers, and content creators. Built with Next.js and modern web technologies, WriteFlow offers an intuitive interface for generating, optimizing, and managing content at scale.
+WriteFlow is a sophisticated SaaS platform that leverages artificial intelligence to streamline and enhance the content creation process for marketers, writers, and content creators. Built with Next.js, Prisma, and modern web technologies, WriteFlow offers an intuitive interface for generating, optimizing, and managing content at scale.
 
 ![WriteFlow Banner](public/banner.png)
 
@@ -23,230 +23,119 @@ WriteFlow is a sophisticated SaaS platform that leverages artificial intelligenc
 - **SEO Tools:** Built-in optimization suggestions and keyword analysis
 - **Usage Analytics:** Track AI usage and content generation statistics
 
+### Integrations
+- **WordPress Publishing:** Directly publish content to your WordPress site
+- **Social Media Integration:** Share content across platforms
+- **Email Export:** Send content via integrated email tools
+
 ## 🚀 Getting Started
 
 ### Prerequisites
-- Node.js 18.x or later
-- npm or yarn package manager
-- OpenAI API key (for AI features)
+- Node.js 16.x or later
+- PostgreSQL database (or use the provided Neon DB connection)
+- Groq API key (for AI capabilities)
 
 ### Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/writeflow.git
+git clone https://github.com/your-username/writeflow.git
 cd writeflow
 ```
 
 2. Install dependencies:
 ```bash
-npm install
-# or
-yarn install
+npm install --legacy-peer-deps
 ```
 
 3. Set up environment variables:
-```bash
-cp .env.example .env.local
+Create a `.env` file in the root directory with the following variables:
 ```
-Edit `.env.local` with your configuration:
-```
-NEXT_PUBLIC_API_URL=your_api_url
-OPENAI_API_KEY=your_openai_api_key
-DATABASE_URL=your_database_url
+# Database
+DATABASE_URL="your-postgresql-connection-string"
+
+# Authentication
+NEXTAUTH_SECRET="your-secret-key"
+NEXTAUTH_URL="http://localhost:3000"
+
+# OAuth (optional)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+
+# AI API
+GROQ_API_KEY="your-groq-api-key"
+
+# App Configuration
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+NEXT_PUBLIC_APP_NAME="WriteFlow"
 ```
 
-4. Run the development server:
+4. Initialize the database:
+```bash
+npx prisma db push
+```
+
+5. Start the development server:
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
-5. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+### Building for Production
 
-## 📋 Implementation Guide
-
-### Phase 1: Project Setup and Basic Infrastructure
-1. **Initial Project Setup**
-   - Initialize Next.js project with TypeScript
-   - Set up Tailwind CSS for styling
-   - Configure ESLint and Prettier
-   - Set up Git hooks with Husky
-
-2. **Database Setup**
-   - Set up PostgreSQL database
-   - Install and configure Prisma ORM
-   - Create initial database schema
-   ```prisma
-   model User {
-     id        String   @id @default(cuid())
-     email     String   @unique
-     name      String?
-     projects  Project[]
-     createdAt DateTime @default(now())
-     updatedAt DateTime @updatedAt
-   }
-
-   model Project {
-     id        String   @id @default(cuid())
-     title     String
-     content   String?  @db.Text
-     userId    String
-     user      User     @relation(fields: [userId], references: [id])
-     createdAt DateTime @default(now())
-     updatedAt DateTime @updatedAt
-   }
-   ```
-
-3. **Authentication System**
-   - Install and configure NextAuth.js
-   - Set up OAuth providers (Google, GitHub)
-   - Create authentication API routes
-   - Implement protected routes middleware
-
-### Phase 2: Core Features Implementation
-1. **Landing Page**
-   - Create responsive hero section
-   - Implement feature showcase
-   - Add pricing section
-   - Design testimonials section
-   - Create footer with navigation
-
-2. **User Dashboard**
-   - Build dashboard layout
-   - Create project cards component
-   - Implement usage statistics
-   - Add quick action buttons
-   - Create navigation sidebar
-
-3. **AI Content Generation**
-   - Set up OpenAI API integration
-   - Create prompt engineering system
-   - Implement content type selection
-   - Add generation parameters control
-   - Build result display component
-
-4. **Content Editor**
-   - Integrate TipTap or ProseMirror editor
-   - Add formatting toolbar
-   - Implement auto-save functionality
-   - Create version history system
-   - Add collaboration features
-
-### Phase 3: Advanced Features
-1. **Content Optimization**
-   ```typescript
-   // Example optimization service
-   interface OptimizationOptions {
-     content: string;
-     targetKeywords: string[];
-     contentType: 'blog' | 'social' | 'ad';
-     tone: 'professional' | 'casual' | 'friendly';
-   }
-
-   class ContentOptimizer {
-     async optimize(options: OptimizationOptions) {
-       // Implement optimization logic
-     }
-   }
-   ```
-
-2. **Analytics System**
-   - Implement user activity tracking
-   - Create analytics dashboard
-   - Add content performance metrics
-   - Set up usage monitoring
-   - Create export functionality
-
-3. **Project Management**
-   - Build project organization system
-   - Implement tagging and categorization
-   - Add search functionality
-   - Create archive system
-   - Implement bulk operations
-
-### Phase 4: API and Integration
-1. **RESTful API Development**
-   ```typescript
-   // Example API route structure
-   // pages/api/projects/[id].ts
-   export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-     const { id } = req.query;
-     const { method } = req;
-
-     switch (method) {
-       case 'GET':
-         // Retrieve project
-         break;
-       case 'PUT':
-         // Update project
-         break;
-       case 'DELETE':
-         // Delete project
-         break;
-       default:
-         res.setHeader('Allow', ['GET', 'PUT', 'DELETE']);
-         res.status(405).end(`Method ${method} Not Allowed`);
-     }
-   }
-   ```
-
-2. **External Integrations**
-   - Implement WordPress integration
-   - Add social media publishing
-   - Create export to various formats
-   - Set up email notification system
-
-### Phase 5: Testing and Deployment
-1. **Testing Setup**
-   - Write unit tests with Jest
-   - Create integration tests
-   - Implement E2E tests with Cypress
-   - Set up CI/CD pipeline
-
-2. **Performance Optimization**
-   - Implement code splitting
-   - Add image optimization
-   - Configure caching strategies
-   - Optimize API responses
-
-3. **Deployment**
-   - Set up staging environment
-   - Configure production environment
-   - Implement monitoring tools
-   - Set up backup systems
-
-### Phase 6: Security and Compliance
-1. **Security Measures**
-   - Implement rate limiting
-   - Add request validation
-   - Set up CORS policies
-   - Configure CSP headers
-
-2. **Compliance Implementation**
-   - Add GDPR compliance features
-   - Implement data export
-   - Create privacy policy
-   - Set up cookie consent
-
-### Directory Structure
+```bash
+npm run build
+npm start
 ```
-writeflow/
-├── app/
-│   ├── api/
-│   │   ├── common/
-│   │   ├── dashboard/
-│   │   └── editor/
-│   ├── hooks/
-│   ├── lib/
-│   ├── pages/
-│   └── styles/
-├── prisma/
-├── public/
-├── tests/
-└── types/
-```
+
+## 🛠️ Tech Stack
+
+- **Frontend:** Next.js, React, TailwindCSS, Framer Motion
+- **Backend:** Next.js API Routes, Prisma ORM
+- **Database:** PostgreSQL
+- **Authentication:** NextAuth.js
+- **AI Integration:** Groq API (LLaMa 3.3)
+- **Deployment:** Vercel
+
+## 📝 Project Structure
+
+- `/app` - Next.js App Router components and pages
+- `/app/api` - API routes for backend functionality
+- `/app/components` - Reusable UI components
+- `/app/lib` - Utility functions and services
+- `/prisma` - Database schema and migrations
+
+## 🧩 Key Components
+
+- **Dashboard:** Central hub for managing content projects
+- **Editor:** Advanced WYSIWYG editor with AI assistance
+- **Project Management:** Create, organize and track content projects
+- **Analytics:** Track performance and usage metrics
+- **Settings:** Configure account and integration settings
+
+## 🔐 Security Features
+
+- Secure authentication with NextAuth.js
+- API key management for integrations
+- XSS protection headers
+- CSRF protection
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## 🙏 Acknowledgements
+
+- [Next.js](https://nextjs.org/)
+- [Prisma](https://www.prisma.io/)
+- [TailwindCSS](https://tailwindcss.com/)
+- [Groq](https://groq.com/)
+- [Vercel](https://vercel.com/)
 
 ## 📚 Documentation
 
