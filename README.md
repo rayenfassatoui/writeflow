@@ -164,32 +164,6 @@ WriteFlow takes security seriously:
 - GDPR and CCPA compliant
 - Rate limiting and abuse prevention
 
-## 🤝 Contributing
-
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
-- Code of Conduct
-- Development process
-- How to submit pull requests
-- Coding standards
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🌐 Links
-
-- [Official Website](https://writeflow.com)
-- [Documentation](https://docs.writeflow.com)
-- [Blog](https://blog.writeflow.com)
-- [Support](https://support.writeflow.com)
-
-## 📞 Support
-
-For support and questions:
-- Email: support@writeflow.com
-- [Discord Community](https://discord.gg/writeflow)
-- [GitHub Issues](https://github.com/yourusername/writeflow/issues)
-
 ## ⭐ Star Us!
 
 If you find WriteFlow helpful, please star our repository! It helps us reach more developers and content creators.
