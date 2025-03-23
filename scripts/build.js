@@ -1,6 +1,7 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 
 // Ensure prisma client is generated
 try {
@@ -106,9 +107,37 @@ try {
   } catch (err) {
     console.error('Error creating prerender-manifest.json:', err);
   }
+
+  // Create preview-props (required for Vercel preview mode)
+  try {
+    // Create the previewProps directory if it doesn't exist
+    const previewPropsDir = path.join(outDir, 'cache', 'next-server', 'previewProps');
+    if (!fs.existsSync(previewPropsDir)) {
+      fs.mkdirSync(previewPropsDir, { recursive: true });
+    }
+
+    // Generate a random preview mode ID
+    const previewModeId = crypto.randomBytes(16).toString('hex');
+    
+    // Create a minimal previewProps file
+    const previewProps = {
+      previewModeId,
+      previewModeSigningKey: crypto.randomBytes(32).toString('hex'),
+      previewModeEncryptionKey: crypto.randomBytes(32).toString('hex')
+    };
+    
+    // Write the default preview props file
+    fs.writeFileSync(
+      path.join(previewPropsDir, 'default.json'), 
+      JSON.stringify(previewProps, null, 2)
+    );
+    console.log('Created preview mode props file');
+  } catch (err) {
+    console.error('Error creating preview props file:', err);
+  }
   
   // Create required folders
-  ['static', 'server', 'cache'].forEach(dir => {
+  ['static', 'server'].forEach(dir => {
     const dirPath = path.join(outDir, dir);
     if (!fs.existsSync(dirPath)) {
       fs.mkdirSync(dirPath, { recursive: true });

@@ -1,37 +1,5 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
   "buildCommand": "npm run vercel-build",
-  "framework": "nextjs",
-  "outputDirectory": ".next",
-  "functions": {
-    "app/api/**/*": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
-  "images": {
-    "domains": [
-      "writeflow.vercel.app"
-    ],
-    "sizes": [16, 32, 48, 64, 96, 128, 256, 384]
-  },
-  "headers": [
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "X-Content-Type-Options",
-          "value": "nosniff"
-        },
-        {
-          "key": "X-Frame-Options",
-          "value": "DENY"
-        },
-        {
-          "key": "X-XSS-Protection",
-          "value": "1; mode=block"
-        }
-      ]
-    }
-  ]
+  "framework": "nextjs"
 } 
