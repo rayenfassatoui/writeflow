@@ -12,6 +12,12 @@
       "rules": {
         "@typescript-eslint/ban-ts-comment": "off"
       }
+    },
+    {
+      "files": ["app/not-found.tsx"],
+      "rules": {
+        "@next/next/no-html-link-for-pages": "off"
+      }
     }
   ]
 }

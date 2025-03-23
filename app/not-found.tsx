@@ -1,3 +1,4 @@
+import Link from 'next/link'
 
 export default function NotFound() {
   return (
@@ -9,12 +10,12 @@ export default function NotFound() {
           The page you are looking for does not exist or has been moved.
         </p>
         <div className="mt-8">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
           >
             Return Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
