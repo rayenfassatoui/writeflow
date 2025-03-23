@@ -7,15 +7,15 @@ const nextConfig = {
   // Disable static export to avoid _not-found page issues
   output: 'standalone',
   poweredByHeader: false,
-  // Disable the 404 static generation
+  // Updated experimental options
   experimental: {
     workerThreads: false,
     cpus: 1,
     optimizeCss: false,
-    optimizePackageImports: ['lucide-react'],
-    instrumentationHook: false,
-    serverComponentsExternalPackages: []
-  }
+    optimizePackageImports: ['lucide-react']
+  },
+  // External packages configuration
+  serverExternalPackages: []
 }
 
 module.exports = nextConfig 
